@@ -11,7 +11,7 @@ GAME RULES:
 
 //IIFE
 (function() {
-  var activePlayer, scores, roundScore, gamePlaying, lastDice;
+  var activePlayer, scores, roundScore, gamePlaying, /*lastDice*/ winningScore;
 
   init();
 
@@ -64,15 +64,13 @@ GAME RULES:
         scores[activePlayer] += roundScore ; 
 
         document.querySelector(`#score-${activePlayer}`).textContent = scores[activePlayer];
-        
 
-        var input = document.querySelector(`.final-score`).value;
-        var winningScore;
+        var inputDOM = document.querySelector(`.final-score`).value;
 
-        if(input){
-            winningScore = input;
+        if(inputDOM){
+            winningScore = inputDOM;
         }else{
-            winningScore = 20;
+            winningScore = 100;
         }
         
         //Check scores 
@@ -91,8 +89,7 @@ GAME RULES:
 
   //New Game button
   document.querySelector(".btn-new").addEventListener("click", () => {
-      init();
-    console.log("New Game");
+      init()
   });
 
   //Next Player function
@@ -111,6 +108,18 @@ GAME RULES:
         document.querySelector(`.player-${activePlayer}-panel`).classList.add("active");
   }
 
+  //Final score enter event
+  document.querySelector('.final-score').addEventListener('keydown', event =>{
+
+    var inputDOM = document.querySelector(`.final-score`).value;
+
+    if(event.key === 'Enter'){
+        winningScore = inputDOM
+    }else{
+        winningScore = 100;
+    }
+  });
+
   //Init function
   function init() {
     scores = [0, 0];
@@ -128,6 +137,10 @@ GAME RULES:
     document.getElementById("current-1").textContent = "0";
     document.querySelector(".player-0-panel").classList.remove("active");
     document.querySelector(".player-1-panel").classList.remove("active");
+    document.querySelector(".player-0-panel").classList.remove("winner");
+    document.querySelector(".player-1-panel").classList.remove("winner");  
     document.querySelector(".player-0-panel").classList.add("active");
+    document.getElementById('name-0').textContent = 'player 1';
+    document.getElementById('name-1').textContent = 'player 2';
   }
 })();
